@@ -1,38 +1,26 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const BASE_URL = "";
-
-// Interface for the authentication token
 interface AuthToken {
   token: string;
 }
-
-// Interface for API responses
 interface ApiResponse<T = any> {
   data: T;
   status: number;
 }
-
-// Interface for error response
 interface ErrorResponse {
   error: boolean;
   message: string[];
 }
-
-// Define the request configuration interface
 interface RequestConfig extends AxiosRequestConfig {
   headers?: {
     Authorization?: string;
   };
 }
-
-// Define the structure of the sign-in request parameters
 interface SignInParams {
   email: string;
   password: string;
 }
-
-// Define the structure of the sign-in response data
 interface SignInResponse {
   message: string;
   token: string;
@@ -42,22 +30,18 @@ interface SignInResponse {
     email: string;
   };
 }
-
-// Function to get auth token from local storage
 const authToken = async (): Promise<string | undefined> => {
   const auth = await localStorage.getItem("auth");
   const { token } = !!auth ? JSON.parse(auth) : null;
   return token;
 };
 
-// Function to get admin auth token from local storage
 const adminAuthToken = async (): Promise<string | undefined> => {
   const auth = await localStorage.getItem("admin-auth");
   const { token } = !!auth ? JSON.parse(auth) : null;
   return token;
 };
 
-// POST request function
 const post = async <T = any,>(
   url: string,
   token: string | undefined,
@@ -75,8 +59,6 @@ const post = async <T = any,>(
     return error.response?.data || { error: true, message: [error.message] };
   }
 };
-
-// PUT request function
 const put = async <T = any,>(
   url: string,
   token: string | undefined,
@@ -111,8 +93,6 @@ const get = async <T = any,>(
     return error.response?.data || { error: true, message: [error.message] };
   }
 };
-
-// Admin API functions
 const admin = {
   signIn: async (params: SignInParams): Promise<SignInResponse | ErrorResponse> => {
     try {
@@ -129,7 +109,6 @@ const admin = {
   },
 };
 
-// Auth API functions
 const auth = {
   signIn: async (params: SignInParams): Promise<SignInResponse | ErrorResponse> => {
     try {
