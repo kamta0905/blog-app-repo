@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import CustomInput from "../../../../components/atoms/CustomInput";
 import PrimaryButton from "../../../../components/atoms/PrimaryButton";
-
 const SignUpForm = () => {
   const formFields = [
     { name: "fullName", type: "text", label: "Full Name" },
