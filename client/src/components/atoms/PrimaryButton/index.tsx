@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, styled } from "@mui/material";
 import { PrimaryButtonProps } from "../../../interfaces/PrimaryButtonProps";
+import "./PrimeButtonStyle.css";
 const StyledButton = styled(Button)(({ theme }) => ({
   width: "100%",
   height: "60px",

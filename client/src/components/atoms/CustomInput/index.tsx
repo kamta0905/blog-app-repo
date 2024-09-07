@@ -1,38 +1,22 @@
-// CustomInput.tsx
 import React from "react";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 import { CustomInputProps } from "../../../interfaces/CustomInputProps";
+import "./CustomInputStyle.css";
 const StyledTextField = styled(TextField)(({ theme }) => ({
   width: "100%",
   maxWidth: "100%",
   marginBottom: 5,
-  "& .MuiInputLabel-outlined": {
-    fontSize: "14px",
-    transform: "none",
-    position: "relative",
-    color: "#595959",
-    fontFamily: "Poppins",
-    paddingBottom: 5,
-  },
-  "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-    transform: "none",
-  },
-  "& label.Mui-focused": {
-    color: "#595959",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "var(--primColor)",
-  },
+  paddingBottom: 5,
   "& .MuiOutlinedInput-root": {
     "& input": {
       zIndex: 110,
     },
-    "& fieldset": {
-      background: "#fff",
-      "& legend": {
-        display: "none",
-      },
+    "& label.Mui-focused": {
+      color: "#000000",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "var(--primColor)",
     },
     "&:hover fieldset": {
       borderColor: "var(--primColor)",
