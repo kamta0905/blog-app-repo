@@ -1,9 +1,7 @@
-
 const User = require("../models/userModels");
 const Validator = require("validator");
 const dotenv = require("dotenv");
 dotenv.config();
-
 
 const GenerateAccessTokenAndRefreshToken = async (admindId) => {
   try {
@@ -20,8 +18,9 @@ const GenerateAccessTokenAndRefreshToken = async (admindId) => {
 };
 
 const adminRegister = async (req, res) => {
+  console.log(req.body, "test");
   try {
-    const {name, email, password } = req.body;
+    const { name, email, password } = req.body;
     if (!(name && email && password)) {
       return res.status(400).json({
         success: false,
@@ -31,9 +30,7 @@ const adminRegister = async (req, res) => {
     // validate email
     const validateEmail = Validator.isEmail(email);
     if (!validateEmail) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email!" });
+      return res.status(400).json({ success: false, message: "Invalid email!" });
     }
     const admin = await User.findOne({ email });
     if (admin) {
@@ -47,17 +44,13 @@ const adminRegister = async (req, res) => {
       name,
       email,
       password,
-      role:1,
+      role: 1,
     };
     await User.create(saveData);
-    return res
-      .status(200)
-      .json({ success: true, message: "Admin regsiter successfully!" });
+    return res.status(200).json({ success: true, message: "Admin regsiter successfully!" });
   } catch (e) {
     console.log(e, "n");
-    return res
-      .status(500)
-      .json({ sucess: false, message: "Something went wrong!" });
+    return res.status(500).json({ sucess: false, message: "Something went wrong!" });
   }
 };
 
@@ -73,27 +66,20 @@ const adminLogin = async (req, res) => {
     // validate email
     const validateEmail = Validator.isEmail(email);
     if (!validateEmail) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email!" });
+      return res.status(400).json({ success: false, message: "Invalid email!" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User does not exists" });
+      return res.status(400).json({ success: false, message: "User does not exists" });
     }
     // compare password
     const validatePassword = await user.comparePassword(password);
     if (!validatePassword) {
-      return res
-        .status(400)
-        .json({ sucess: false, message: "Incorrct passowrd!" });
+      return res.status(400).json({ sucess: false, message: "Incorrct passowrd!" });
     }
 
-    const { accessToken, refreshToken } =
-      await GenerateAccessTokenAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await GenerateAccessTokenAndRefreshToken(user._id);
     let adminData = {
       _id: user._id,
       name: user.name,
@@ -112,9 +98,7 @@ const adminLogin = async (req, res) => {
       .json({ sucess: true, adminData, accessToken, refreshToken });
   } catch (e) {
     console.log(e, "nn");
-    return res
-      .status(500)
-      .json({ sucess: false, message: "Something went wrong!" });
+    return res.status(500).json({ sucess: false, message: "Something went wrong!" });
   }
 };
 
@@ -138,27 +122,19 @@ const adminLogout = async (req, res) => {
       .json({ success: true, message: "Admin logout sucessfully!" });
   } catch (e) {
     console.log(e, "nn");
-    return res
-      .status(500)
-      .json({ sucess: false, message: "Something went wrong!" });
+    return res.status(500).json({ sucess: false, message: "Something went wrong!" });
   }
 };
 
 const generateRefreshToken = async (req, res) => {
   try {
-    const incomingRefreshToken =
-      req.cookies?.refreshToken || req.body.refreshToken;
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
     let admin_id = req.middleware._id;
     console.log(admin_id, "nnnnnnnnnnnn");
     console.log(incomingRefreshToken, "n");
-    const validateRefreshToken = await verifyRefreshToken(
-      admin_id,
-      incomingRefreshToken
-    );
+    const validateRefreshToken = await verifyRefreshToken(admin_id, incomingRefreshToken);
     if (!validateRefreshToken) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid refresh token!" });
+      return res.status(400).json({ success: false, message: "Invalid refresh token!" });
     }
     /// find refreshtoken
     const findRefreshToken = await User.findOne({
@@ -166,13 +142,10 @@ const generateRefreshToken = async (req, res) => {
     });
     // console.log(findRefreshToken,)
     if (findRefreshToken.refreshToken !== incomingRefreshToken) {
-      return res
-        .status(200)
-        .json({ success: false, message: "Refresh token is expired!" });
+      return res.status(200).json({ success: false, message: "Refresh token is expired!" });
     }
 
-    const { accessToken, refreshToken } =
-      await GenerateAccessTokenAndRefreshToken(req.middleware._id);
+    const { accessToken, refreshToken } = await GenerateAccessTokenAndRefreshToken(req.middleware._id);
     const options = {
       httpOnly: true,
       secure: true,
@@ -185,38 +158,9 @@ const generateRefreshToken = async (req, res) => {
       .json({ sucess: true, accessToken, refreshToken });
   } catch (e) {
     console.log(e, "nn");
-    return res
-      .status(500)
-      .json({ sucess: false, message: "Something went wrong!" });
+    return res.status(500).json({ sucess: false, message: "Something went wrong!" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = {
   adminRegister,
