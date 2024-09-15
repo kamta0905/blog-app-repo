@@ -31,7 +31,8 @@ const SignInForm = () => {
         })) as any;
 
         if (res && res.accessToken) {
-          login(res.accessToken);
+          console.log(res.accessToken);
+          login(res.accessToken, res.refreshToken, true);
           navigate("/");
           showSnackbar("Successfully signed in!", "success");
         } else {

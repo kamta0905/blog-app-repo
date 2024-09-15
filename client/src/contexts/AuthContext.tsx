@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface SnackbarState {
   open: boolean;
@@ -8,7 +8,10 @@ interface SnackbarState {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  isAdmin: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+  login: (accessToken: string, refreshToken: string, isAdmin: boolean) => void;
   logout: () => void;
   snackbar: SnackbarState;
   showSnackbar: (message: string, severity: SnackbarState["severity"]) => void;
@@ -19,18 +22,46 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
     message: "",
     severity: "info",
   });
 
-  const login = (token: string) => {
+  useEffect(() => {
+    const storedAccessToken = localStorage.getItem("accessToken");
+    const storedRefreshToken = localStorage.getItem("refreshToken");
+    const storedIsAdmin = localStorage.getItem("isAdmin");
+
+    if (storedAccessToken && storedRefreshToken) {
+      setIsAuthenticated(true);
+      setAccessToken(storedAccessToken);
+      setRefreshToken(storedRefreshToken);
+      setIsAdmin(storedIsAdmin === "true");
+    }
+  }, []);
+
+  const login = (accessToken: string, refreshToken: string, isAdmin: boolean) => {
     setIsAuthenticated(true);
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
+    setIsAdmin(isAdmin);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("isAdmin", isAdmin.toString());
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    setIsAdmin(false);
+    setAccessToken(null);
+    setRefreshToken(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("isAdmin");
   };
 
   const showSnackbar = (message: string, severity: SnackbarState["severity"]) => {
@@ -45,6 +76,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        isAdmin,
+        accessToken,
+        refreshToken,
         login,
         logout,
         snackbar,

@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { Navigate, Route, Routes as RouteConfig } from "react-router-dom";
 import routes from "../constants/routes";
 import SignUp from "../Themes/LumenX/SignUp";
@@ -9,12 +8,18 @@ export const Routes = () => {
   const isAuthenticated = useAuth();
   return (
     <RouteConfig>
-      <Route path={routes.signUp} element={<SignUp />} />
-      <Route path={routes.signIn} element={<SignIn />} />
+      <Route
+        path={routes.signUp}
+        element={isAuthenticated.isAuthenticated ? <Navigate to="/" replace /> : <SignUp />}
+      />
+      <Route
+        path={routes.signIn}
+        element={isAuthenticated.isAuthenticated ? <Navigate to="/" replace /> : <SignIn />}
+      />
       <Route
         path="/"
         element={
-          <PrivateRoute isAuthenticated={isAuthenticated} type="admin">
+          <PrivateRoute isAuthenticated={isAuthenticated.isAuthenticated} type="admin">
             <div>Dashboard</div>
           </PrivateRoute>
         }

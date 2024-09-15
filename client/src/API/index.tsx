@@ -21,7 +21,22 @@ interface SignInParams {
   email: string;
   password: string;
 }
+interface SignUpParams {
+  email: string;
+  password: string;
+  name: string;
+  isAdmin: number;
+}
 interface SignInResponse {
+  message: string;
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+interface SignUpResponse {
   message: string;
   token: string;
   user: {
@@ -97,6 +112,19 @@ const admin = {
   signIn: async (params: SignInParams): Promise<SignInResponse | ErrorResponse> => {
     try {
       const res = await post<SignInResponse>(`${BASE_URL}/api/admin/login`, undefined, params);
+      if ("status" in res && res.status === 400) {
+        return { error: true, message: [res.data.message] };
+      } else if ("statusCode" in res && res.statusCode === 401) {
+        return { error: true, message: ["Incorrect Email Address or password."] };
+      }
+      return res as any;
+    } catch (e: any) {
+      return { error: true, message: [e.message] };
+    }
+  },
+  signUp: async (params: SignUpParams): Promise<SignUpResponse | ErrorResponse> => {
+    try {
+      const res = await post<SignUpResponse>(`${BASE_URL}/api/admin/register`, undefined, params);
       if ("status" in res && res.status === 400) {
         return { error: true, message: [res.data.message] };
       } else if ("statusCode" in res && res.statusCode === 401) {

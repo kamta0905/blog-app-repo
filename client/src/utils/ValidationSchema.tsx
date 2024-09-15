@@ -16,7 +16,7 @@ const phoneNumber = Yup.string()
 
 const dateOfBirth = Yup.date().nullable().required("Date of birth is required");
 
-const url = Yup.string().url("Invalid URL").required("URL is required");
+// const url = Yup.string().url("Invalid URL").required("URL is required");
 
 const validationSchemas = {
   register: Yup.object({

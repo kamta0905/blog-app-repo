@@ -7,7 +7,7 @@ import ScrollToTop from "./Routes/ScrollTop";
 import { Routes } from "./Routes";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
-import SnackbarWrapper from "./components/molicules/SnackbarWrapper";
+import SnackbarWrapper from "./components/molecules/SnackbarWrapper";
 function App() {
   return (
     <ModalProvider>

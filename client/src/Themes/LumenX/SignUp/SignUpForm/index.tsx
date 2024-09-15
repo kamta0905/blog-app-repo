@@ -1,12 +1,16 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import CustomInput from "../../../../components/atoms/CustomInput";
 import PrimaryButton from "../../../../components/atoms/PrimaryButton";
 import InputErrorMsg from "../../../../components/atoms/InputErrorMsg";
 import validationSchemas from "../../../../utils/ValidationSchema";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { admin } from "../../../../API";
 
 const SignUpForm = () => {
+  const { login, showSnackbar } = useAuth();
+  const navigate = useNavigate();
   const formFields = [
     { name: "fullName", type: "text", label: "Full Name" },
     { name: "email", type: "email", label: "Email" },
@@ -21,8 +25,29 @@ const SignUpForm = () => {
       confirmPassword: "",
     },
     validationSchema: validationSchemas.register,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const res = (await admin.signUp({
+          email: values.email,
+          password: values.password,
+          name: values.fullName,
+          isAdmin: 1,
+        })) as any;
+
+        if (res.success) {
+          navigate("/login");
+          showSnackbar("Successfully registered!", "success");
+        } else {
+          console.error("Registration failed:", res.message);
+          showSnackbar("Registration failed. Please try again.", "error");
+          formik.setErrors({ email: res.message || "Registration failed" });
+        }
+      } catch (error) {
+        console.error("An error occurred during registration:", error);
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+        formik.setErrors({ email: errorMessage });
+        showSnackbar("An unexpected error occurred. Please try again.", "error");
+      }
     },
   });
 
