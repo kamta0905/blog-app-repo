@@ -1,37 +1,49 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import CustomInput from "../../../../components/atoms/CustomInput";
 import PrimaryButton from "../../../../components/atoms/PrimaryButton";
 import InputErrorMsg from "../../../../components/atoms/InputErrorMsg";
+import validationSchemas from "../../../../utils/ValidationSchema";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { admin } from "../../../../API";
 
-const SignUpForm = () => {
+const SignInForm = () => {
+  const { login, showSnackbar } = useAuth();
+  const navigate = useNavigate();
+
   const formFields = [
-    { name: "fullName", type: "text", label: "Full Name" },
     { name: "email", type: "email", label: "Email" },
     { name: "password", type: "password", label: "Password" },
-    { name: "confirmPassword", type: "password", label: "Confirm Password" },
   ];
-
-  const validationSchema = Yup.object({
-    fullName: Yup.string().required("Full name is required").min(2, "Full name must be at least 2 characters"),
-    email: Yup.string().email("Invalid email address").required("Email is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Confirm password is required"),
-  });
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    validationSchema: validationSchemas.login,
+    onSubmit: async (values) => {
+      try {
+        const res = (await admin.signIn({
+          email: values.email,
+          password: values.password,
+        })) as any;
+
+        if (res && res.accessToken) {
+          login(res.accessToken);
+          navigate("/");
+          showSnackbar("Successfully signed in!", "success");
+        } else {
+          console.log("Login failed:", res.message);
+          showSnackbar("Login failed. Please check your credentials.", "error");
+          formik.setErrors({ email: res.message });
+        }
+      } catch (error) {
+        console.log("An error occurred during sign in:", error);
+        formik.setErrors({ email: "An unexpected error occurred. Please try again." });
+        showSnackbar("An unexpected error occurred. Please try again.", "error");
+      }
     },
   });
 
@@ -50,7 +62,6 @@ const SignUpForm = () => {
           />
           {formik.touched[field.name as keyof typeof formik.touched] &&
             formik.errors[field.name as keyof typeof formik.errors] && (
-              // <div style={{ color: "red" }}>{formik.errors[field.name as keyof typeof formik.errors]}</div>
               <InputErrorMsg>{formik.errors[field.name as keyof typeof formik.errors]}</InputErrorMsg>
             )}
         </div>
@@ -60,4 +71,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

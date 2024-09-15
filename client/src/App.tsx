@@ -6,12 +6,17 @@ import { ModalProvider } from "./contexts/ModalPopup";
 import ScrollToTop from "./Routes/ScrollTop";
 import { Routes } from "./Routes";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import SnackbarWrapper from "./components/molicules/SnackbarWrapper";
 function App() {
   return (
     <ModalProvider>
       <BrowserRouter>
         <ScrollToTop />
-        <Routes />
+        <AuthProvider>
+          <SnackbarWrapper />
+          <Routes />
+        </AuthProvider>
       </BrowserRouter>
     </ModalProvider>
   );

@@ -7,8 +7,8 @@ const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
   color: theme.palette.error.main,
   marginTop: -4,
   marginBottom: 10,
-  marginLeft: 14,
-  fontSize: "0.75rem",
+  marginLeft: 0,
+  fontSize: "0.85rem",
 }));
 
 export const InputErrorMsg: React.FC<InputErrorMsgProps> = ({ children }) => {

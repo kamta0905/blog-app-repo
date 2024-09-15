@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-const BASE_URL = "";
+const BASE_URL = "http://localhost:3001";
 interface AuthToken {
   token: string;
 }
@@ -96,7 +96,7 @@ const get = async <T = any,>(
 const admin = {
   signIn: async (params: SignInParams): Promise<SignInResponse | ErrorResponse> => {
     try {
-      const res = await post<SignInResponse>(`${BASE_URL}/api/users/login`, undefined, params);
+      const res = await post<SignInResponse>(`${BASE_URL}/api/admin/login`, undefined, params);
       if ("status" in res && res.status === 400) {
         return { error: true, message: [res.data.message] };
       } else if ("statusCode" in res && res.statusCode === 401) {
