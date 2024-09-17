@@ -6,6 +6,7 @@ const connection = require("./database/connection");
 const app = express();
 connection();
 const adminRoutes = require("./routes/adminRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // set middleware
 app.use(express.json());
@@ -20,6 +21,9 @@ app.get("/", (req, res) => {
 
 // set routes
 app.use("/api/admin", adminRoutes);
+
+// set user routes
+app.use("/api/users", userRoutes);
 
 // Express error handling
 app.use((req, res, next) => {
