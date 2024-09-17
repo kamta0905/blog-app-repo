@@ -4,6 +4,7 @@ import SignUp from "../Themes/LumenX/SignUp";
 import SignIn from "../Themes/LumenX/SignIn";
 import { PrivateRoute } from "./PrivateRoute";
 import { useAuth } from "../contexts/AuthContext";
+import DashboardLayout from "../components/template/DashboardLayout";
 export const Routes = () => {
   const isAuthenticated = useAuth();
   return (
@@ -20,7 +21,7 @@ export const Routes = () => {
         path="/"
         element={
           <PrivateRoute isAuthenticated={isAuthenticated.isAuthenticated} type="admin">
-            <div>Dashboard</div>
+            <DashboardLayout />
           </PrivateRoute>
         }
       />
