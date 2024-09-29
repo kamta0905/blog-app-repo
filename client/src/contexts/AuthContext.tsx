@@ -30,17 +30,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     message: "",
     severity: "info",
   });
-
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
     const storedRefreshToken = localStorage.getItem("refreshToken");
     const storedIsAdmin = localStorage.getItem("isAdmin");
-
     if (storedAccessToken && storedRefreshToken) {
       setIsAuthenticated(true);
       setAccessToken(storedAccessToken);
       setRefreshToken(storedRefreshToken);
       setIsAdmin(storedIsAdmin === "true");
+    } else {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
     }
   }, []);
 

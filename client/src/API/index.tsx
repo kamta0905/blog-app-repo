@@ -52,9 +52,11 @@ const authToken = async (): Promise<string | undefined> => {
 };
 
 const adminAuthToken = async (): Promise<string | undefined> => {
-  const auth = await localStorage.getItem("admin-auth");
-  const { token } = !!auth ? JSON.parse(auth) : null;
-  return token;
+  const auth = await localStorage.getItem("accessToken");
+  if (auth) {
+    return auth;
+  }
+  return undefined;
 };
 
 const post = async <T = any,>(
@@ -133,6 +135,34 @@ const admin = {
       return res as any;
     } catch (e: any) {
       return { error: true, message: [e.message] };
+    }
+  },
+  getProfile: async (): Promise<any> => {
+    try {
+      const tokenConfig = await adminAuthToken();
+      const response = await axios.get<any>(`${BASE_URL}/api/users/profile`, {
+        headers: {
+          Authorization: tokenConfig,
+        },
+      });
+      return response;
+    } catch (error: any) {
+      throw error;
+    }
+  },
+
+  updateProfile: async (profileData: { name: string; email: string; bio: string; dateOfBirth: string }) => {
+    try {
+      const tokenConfig = await adminAuthToken();
+      const response = await axios.put<any>(`${BASE_URL}/api/users/profile`, {
+        headers: {
+          Authorization: tokenConfig,
+        },
+        profileData,
+      });
+      return response;
+    } catch (error: any) {
+      throw error;
     }
   },
 };

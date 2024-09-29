@@ -6,19 +6,7 @@ interface DemoPageContentProps {
 }
 
 const PageContent: React.FC<DemoPageContentProps> = ({ pathname }) => {
-  return (
-    <Box
-      sx={{
-        py: 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <Typography>Dashboard content for {pathname}</Typography>
-    </Box>
-  );
+  return <Typography>{pathname}</Typography>;
 };
 
 export default PageContent;

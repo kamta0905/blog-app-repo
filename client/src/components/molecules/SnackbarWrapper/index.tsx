@@ -1,5 +1,3 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import CustomSnackbar from "../../atoms/CustomSnackbar";
 
@@ -11,7 +9,7 @@ const SnackbarWrapper = () => {
         open={snackbar.open}
         message={snackbar.message}
         onClose={hideSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={5000}
         severity={snackbar.severity}
       />

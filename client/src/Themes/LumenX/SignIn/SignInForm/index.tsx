@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import CustomInput from "../../../../components/atoms/CustomInput";
 import PrimaryButton from "../../../../components/atoms/PrimaryButton";
@@ -7,10 +7,20 @@ import validationSchemas from "../../../../utils/ValidationSchema";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { admin } from "../../../../API";
+import routes from "../../../../constants/routes";
 
 const SignInForm = () => {
   const { login, showSnackbar } = useAuth();
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/");
+    } else {
+      navigate(routes.signIn);
+    }
+  }, []);
 
   const formFields = [
     { name: "email", type: "email", label: "Email" },
@@ -31,17 +41,14 @@ const SignInForm = () => {
         })) as any;
 
         if (res && res.accessToken) {
-          console.log(res.accessToken);
           login(res.accessToken, res.refreshToken, true);
           navigate("/");
           showSnackbar("Successfully signed in!", "success");
         } else {
-          console.log("Login failed:", res.message);
           showSnackbar("Login failed. Please check your credentials.", "error");
           formik.setErrors({ email: res.message });
         }
       } catch (error) {
-        console.log("An error occurred during sign in:", error);
         formik.setErrors({ email: "An unexpected error occurred. Please try again." });
         showSnackbar("An unexpected error occurred. Please try again.", "error");
       }

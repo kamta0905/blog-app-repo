@@ -15,6 +15,7 @@ const phoneNumber = Yup.string()
   .required("Phone number is required");
 
 const dateOfBirth = Yup.date().nullable().required("Date of birth is required");
+const bio = Yup.string().max(500, "Bio must not exceed 500 characters");
 
 // const url = Yup.string().url("Invalid URL").required("URL is required");
 
@@ -35,6 +36,7 @@ const validationSchemas = {
     fullName,
     phoneNumber,
     dateOfBirth,
+    bio,
   }),
 
   customSchema: (schemaObj: any) => Yup.object(schemaObj),
