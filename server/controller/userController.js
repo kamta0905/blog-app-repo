@@ -2,8 +2,8 @@ const User = require("../models/userModels");
 
 const updateUserProfile = async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming auth middleware sets req.user
-    const { name, email, dateOfBirth, gender, profession } = req.body;
+    const userId = req.user._id;
+    const { name, email, dateOfBirth, gender, profession, bio } = req.body;
 
     const user = await User.findByIdAndUpdate(
       userId,
@@ -12,6 +12,7 @@ const updateUserProfile = async (req, res) => {
         ...(email && { email }),
         ...(dateOfBirth && { dateOfBirth: new Date(dateOfBirth) }),
         ...(gender && { gender }),
+        ...(bio && { bio }),
         ...(profession && { profession }),
       },
       { new: true, runValidators: true }
@@ -34,7 +35,7 @@ const updateUserProfile = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
   try {
-    const userId = req.user._id; // Assuming auth middleware sets req.user
+    const userId = req.user._id;
 
     const user = await User.findById(userId).select("-password -refreshToken");
 

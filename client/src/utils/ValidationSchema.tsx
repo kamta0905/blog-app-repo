@@ -34,9 +34,6 @@ const validationSchemas = {
 
   profile: Yup.object({
     fullName,
-    phoneNumber,
-    dateOfBirth,
-    bio,
   }),
 
   customSchema: (schemaObj: any) => Yup.object(schemaObj),

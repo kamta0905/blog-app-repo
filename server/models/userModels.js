@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     role: { type: Number, default: 2 }, // 1 for Admin, 2 for User
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     dateOfBirth: { type: Date },
+    bio: { type: String },
     gender: { type: String, enum: ["male", "female", "other"] },
     profession: { type: String },
   },

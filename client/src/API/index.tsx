@@ -151,14 +151,20 @@ const admin = {
     }
   },
 
-  updateProfile: async (profileData: { name: string; email: string; bio: string; dateOfBirth: string }) => {
+  updateProfile: async (profileData: {
+    name: string;
+    email: string;
+    gender: string;
+    bio: string;
+    profession: string;
+    dateOfBirth: string;
+  }) => {
     try {
       const tokenConfig = await adminAuthToken();
-      const response = await axios.put<any>(`${BASE_URL}/api/users/profile`, {
+      const response = await axios.put<any>(`${BASE_URL}/api/users/profile`, profileData, {
         headers: {
           Authorization: tokenConfig,
         },
-        profileData,
       });
       return response;
     } catch (error: any) {

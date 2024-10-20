@@ -36,7 +36,6 @@ export const Routes = () => {
           </PrivateRoute>
         }
       />
-      {/* <Route path="*" element={<Navigate to={routes.signIn} replace />} /> */}
     </RouteConfig>
   );
 };

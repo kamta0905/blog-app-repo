@@ -1,0 +1,19 @@
+.profileSection h1 {
+    font-size: 26px;
+    font-weight: var(--font-600);
+    margin-bottom: 20px;
+}
+
+.profileSection>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profileSection>div p {
+    background-color: #000000;
+    color: #ffffff;
+    font-style: italic;
+    padding: 5px;
+    border-radius: 5px;
+}
